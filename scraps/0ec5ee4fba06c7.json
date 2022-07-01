@@ -1,0 +1,13 @@
+{
+  "title": "GoだけでWeb画面をyoutubeライブに配信する方法の調査",
+  "closed": false,
+  "archived": false,
+  "created_at": "2022-05-08",
+  "comments": [
+    {
+      "author": "soraride",
+      "created_at": "2022-05-08",
+      "body_markdown": "https://zenn.dev/0gm/articles/go_headless-browser_cloud-run\n\nhttps://github.com/chromedp/chromedp\n\nhttps://github.com/chromedp/chromedp/issues/275"
+    }
+  ]
+}

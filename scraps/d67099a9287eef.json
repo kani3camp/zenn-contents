@@ -1,0 +1,89 @@
+{
+  "title": "増え続けるFirestoreのデータをBigqueryへ保管",
+  "closed": false,
+  "archived": false,
+  "created_at": "2021-11-11",
+  "comments": [
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "## 手順\n1. 0:00 Firestoreの該当コレクションを毎日cloud functionでcloud storageへexportする。完了したらlambdaを呼び出す。\n2. 1:00 lambdaで、cloud storageからbigqueryの一時テーブルへデータをバッチ取り込み（上書き）\n3. 2:00 lambdaで、bqの一時テーブルから指定した日のデータをメインテーブルへ追加\n3. 2:00 lambdaで、Firestoreの元データを削除\n\n## Bigqueryでのテーブル管理\n~~１ヶ月ごとにテーブルを新規作成する~~",
+      "body_updated_at": "2022-03-19"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "firestoreのエクスポート時の注意点：**collection-idsを指定しないといけない**\nhttps://qiita.com/kira_puka/items/98283e837f30209f23c8#a-%E3%83%90%E3%83%83%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%82%BF%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B%E9%9A%9B%E3%81%AFcollection-ids%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%91%E3%81%AA%E3%81%84"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "firestoreに１日分のログを書き込むことになるので、コストを試算する。"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "料金とか確認\nhttps://cloud.google.com/bigquery/docs/batch-loading-data?hl=ja\nそんなに高くなさそうなので全然あり。"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "バッチ読み込みがコスト、パフォーマンス面でバランスがよさそう\nバッチ読み込みは読み込みソースが限られる。\nGCSにあるFirestoreエクスポートファイルを読み込むか、jsonファイル（これはGCSでなくてもよさげ）を読み込む方法が有力。\n2つとも試したいが、Firestore エクスポートデータで済むならjsonの方法はいらないと思う。\nbqでバッチ読み込み時にコレクションを指定して読み込めるが、コレクションを１つ指定してエクスポートしたデータのみが取り込めるため、既存の日時all-collectionsのバックアップデータは残念ながら取り込めないらしい。",
+      "body_updated_at": "2021-11-11"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "## 注意\n> エクスポートは、エクスポート開始時に取得された正確なデータベース スナップショットではありません。エクスポートには、オペレーションの実行中に追加された変更が含まれる場合があります。\n\nhttps://firebase.google.com/docs/firestore/manage-data/export-import#export_data",
+      "body_updated_at": "2021-11-11"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "データのエクスポートをスケジュールする\nhttps://firebase.google.com/docs/firestore/solutions/schedule-export\n> エクスポート オペレーションには、エクスポート先の Cloud Storage バケットが必要です。",
+      "body_updated_at": "2021-11-11"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "実際にfirestoreからbigqueryにデータを転送することができたが、注意点がある。\n- firestoreからcloud storageにエクスポートする際に、cloud storageのリージョンは〜と〜が選択できるが、\n- bigqueryに読み込むときは、該当データセットのロケーションとcloud storageのバケットのロケーションは同じでないといけない？\n-  > データセットは、エクスポート ファイルが格納される Cloud Storage バケットと同じリージョンまたはマルチリージョンのロケーションに存在する必要があります。\n- > 新しいテーブルを作成してデータを保存することも、既存のテーブルを上書きすることもできますが、既存のテーブルに Firestore エクスポート データを追加することはできません。\n- 全てのロケーションを同じにしておくのが確実\n\n実験時の状況\n- Firestore：asia-southeast2\n- cloud storage バケット：asia-southeast2\n- asia-southeast2\n",
+      "body_updated_at": "2021-11-11"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-11",
+      "body_markdown": "Bigqueryにcloud storageからデータを読み込むときのドキュメント：\nhttps://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/insert"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-13",
+      "body_markdown": "https://cloud.google.com/bigquery/docs/loading-data-cloud-firestore?hl=ja"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-13",
+      "body_markdown": "## ハマりポイント\ncloud functionのデプロイ時\n- 環境変数のGCLOUD_PROJECTは手動で設定しなければならない（pythonやgolangだとデフォルトで設定されるらしいが、node.jsは違う）\n- 実行関数名の指定を忘れないように。ドキュメントの手順にあるけど。![](https://storage.googleapis.com/zenn-user-upload/f38f9ab6c1497d8c09565b56.png)\n- cloud functionを実行するサービスアカウント（PROJECT_ID@appspot.gserviceaccount.com）に対して、適切な権限を付与する。これもドキュメントに書かれてるけど。",
+      "body_updated_at": "2022-03-07"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-13",
+      "body_markdown": "https://cloud.google.com/bigquery/docs/writing-results#permanent-table"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-13",
+      "body_markdown": "https://qiita.com/fiemon/items/b9eaa7b3ce339dc0e9f5#bigquery-load"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2021-11-13",
+      "body_markdown": "https://github.com/GoogleCloudPlatform/golang-samples/tree/bdc987b4624a0939603bb9f0a74eb2b815aa6577/bigquery/snippets"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2022-03-18",
+      "body_markdown": "https://cloud.google.com/bigquery/quotas?hl=ja\nbigqueryではデータセット数、テーブル数ともに無制限"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Twitter APIで特定ユーザーの過去ツイートを取得する",
+  "closed": false,
+  "archived": false,
+  "created_at": "2022-04-25",
+  "comments": [
+    {
+      "author": "soraride",
+      "created_at": "2022-04-25",
+      "body_markdown": "前提としてTwitter APIのv2のみを対象として調査。\n\n公式Docだとこの辺かな\nhttps://developer.twitter.com/en/docs/twitter-api/tweets/timelines/introduction\n\nあるユーザーIDの最近のツイートやリツイート、リプライ、引用ツイートなどを取得できる。\n> This endpoint gives you access to a single Twitter account's most recent Tweets, Retweets, replies, and Quote Tweets, similar to what may be seen on a user's profile timeline.\n\n最近の3200件が取得できるとのこと。\n逆にいうと、それ以上過去のツイート等は取得できなさそう。\n> The endpoint can return the 3,200 most recent Tweets, Retweets, replies and Quote Tweets posted by the user.\n\n1回のリクエストで100件取得できる。\n> Results are paginated up to 100 Tweets per page. ",
+      "body_updated_at": "2022-04-25"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2022-04-25",
+      "body_markdown": "Pythonのサンプルコード\nhttps://github.com/twitterdev/Twitter-API-v2-sample-code/blob/main/User-Tweet-Timeline/user_tweets.py\n"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2022-04-25",
+      "body_markdown": "Tweetタイムラインのレート制限は、\n15分間に1Appで1500リクエストまで。\nまた、15分間に1対象ユーザーあたり900リクエストまで。\n\n![](https://storage.googleapis.com/zenn-user-upload/025c999cc2a5-20220425.png)\n\nつまり、1つのAppで発行したアクセストークンを使って1人のユーザーをターゲットとしてツイートを取得する場合、15分間に900回までリクエストが投げれる。\n1回のリクエストで100件のツイートが取得できるので、特定ユーザーの最近のツイート上限である3200件にはレート制限を気にすることなく簡単に到達できそう。\n\nhttps://developer.twitter.com/en/portal/products",
+      "body_updated_at": "2022-04-25"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2022-04-25",
+      "body_markdown": "さらに、Tweet Capとかいう概念があるらしい。\n1か月でどれだけの件数のデータを取得できるかの制限も存在し、何種類か選べるらしい。\nhttps://developer.twitter.com/en/docs/twitter-api/tweet-caps\n> Tweet Cap: Certain endpoints (like filtered stream and recent search) have a limit on how many Tweets they can pull per month. Learn more",
+      "body_updated_at": "2022-04-25"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "title": "既存Lambda + Api gatewayをCloud formation + Github Actions対応する",
+  "closed": false,
+  "archived": false,
+  "created_at": "2022-03-26",
+  "comments": [
+    {
+      "author": "soraride",
+      "created_at": "2022-03-26",
+      "body_markdown": "## 意識すること\n- 既存のリソース（Lambda関数、Rest API）をそのまま使いたい\n- ローカルからのcloudformationデプロイも、Github ActionsによるCI/CDも両方できるようにしたい\n- AWS SAMとかのことも知る\n  - SAMのテンプレートはCloudformationの拡張版らしい（？）\n- OSSとしてAWSの設定を明示的にコード化することがモチベーションとしてある。自分以外の人が環境を簡単に構築できるようにする。",
+      "body_updated_at": "2022-03-26"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2022-03-26",
+      "body_markdown": "https://techblog.raccoon.ne.jp/archives/1601887183.html\nhttps://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html\nhttps://theburningmonk.com/cloudformation-ref-and-getatt-cheatsheet/\nhttps://www.ketancho.net/entry/2018/04/19/075500\nhttps://note.com/shift_tech/n/n28a0b7e56680\nhttps://dev.classmethod.jp/articles/cloudformation-import-existing-resources/"
+    },
+    {
+      "author": "soraride",
+      "created_at": "2022-06-09",
+      "body_markdown": "https://qiita.com/leomaro7/items/b95880f137c63881f164"
+    }
+  ]
+}
