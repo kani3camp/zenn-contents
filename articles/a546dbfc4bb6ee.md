@@ -20,7 +20,7 @@ Youtubeのアカウントを持っている人は誰でもすぐに利用でき�
 下記リンクのチャンネルに行くとライブ中の動画が見えるので、そちらから視聴できます。
 https://www.youtube.com/channel/UCXuD2XmPTdpVy7zmwbFVZWg
 
-チャンネル登録者数は2万7千人を突破しています。
+チャンネル登録者数は6万人を突破しています。
 
 ![](https://storage.googleapis.com/zenn-user-upload/dc856701acb8-20220108.jpg)
 *配信のようす（ユーザー名は伏せています）*
@@ -67,7 +67,7 @@ Youtubeライブの**チャット欄に入室コマンドを書き込む**こと
 | Botプログラム | Go |
 | 自動バッチ処理プログラム | Go, AWS Lambda, API Gateway, Cloud Scheduler |
 | 配信画面（WEBアプリ） | Next.js, TypeScript, Emotion |
-| Web API | Youtube Live Streaming API, LINE Messaging API |
+| Web API | Youtube Live Streaming API, LINE Messaging API, Discord API |
 
 ## 技術の選定理由
 本格的にソフトウェアのプロジェクトを作るのは初めてだったため、**とにかく作り切る**ことを第一として、基本的には**途中で挫折しないように、慣れてない技術に手を出さない**にしました。
